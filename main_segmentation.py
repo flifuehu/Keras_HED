@@ -6,11 +6,11 @@ from keras.utils import plot_model
 from keras import backend as K
 from keras import callbacks
 import numpy as np
-import pdb
+# import pdb
 
 
 def generate_minibatches(dataParser, train=True):
-    pdb.set_trace()
+    # pdb.set_trace()
     while True:
         if train:
             batch_ids = np.random.choice(dataParser.training_ids, dataParser.batch_size_train)
@@ -27,16 +27,17 @@ if __name__ == "__main__":
     csv_fn        = os.path.join(model_dir, 'train_log.csv')
     checkpoint_fn = os.path.join(model_dir, 'checkpoint.{epoch:02d}-{val_loss:.2f}.hdf5')
 
+    train_data_dir = '../../HED-BSDS/'
     batch_size_train = 10
 
     # environment
     K.set_image_data_format('channels_last')
     K.image_data_format()
-    os.environ["CUDA_VISIBLE_DEVICES"]= '0'
+    os.environ["CUDA_VISIBLE_DEVICES"]= '1'
     if not os.path.isdir(model_dir): os.makedirs(model_dir)
 
     # prepare data
-    dataParser = DataParser(batch_size_train)
+    dataParser = DataParser(train_data_dir, batch_size_train)
 
     # model
     model = hed()
@@ -58,6 +59,6 @@ if __name__ == "__main__":
                         validation_steps=dataParser.validation_steps,
                         callbacks=[checkpointer, csv_logger, tensorboard])
 
-    pdb.set_trace()
+    # pdb.set_trace()
 
     print(train_history)
